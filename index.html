@@ -19,6 +19,7 @@ overflow:hidden;
 .screen{
 display:none;
 position:absolute;
+width:100%;
 }
 
 .active{
@@ -26,7 +27,7 @@ display:block;
 }
 
 h1{
-font-size:30px;
+font-size:32px;
 }
 
 button{
@@ -47,6 +48,26 @@ color:white;
 #no{
 background:#444;
 color:white;
+}
+
+.reload{
+position:absolute;
+top:20px;
+right:20px;
+font-size:25px;
+background:none;
+border:none;
+cursor:pointer;
+}
+
+.alert{
+border:3px solid red;
+color:red;
+padding:15px;
+margin-top:20px;
+font-weight:bold;
+border-radius:10px;
+display:inline-block;
 }
 
 .hearts{
@@ -78,68 +99,90 @@ opacity:0;
 }
 }
 
-</style></head><body><div class="hearts" id="hearts"></div><div id="loading" class="screen active">
+</style></head><body><div class="hearts" id="hearts"></div><!-- CARGANDO INICIAL --><div id="loading" class="screen active">
 <h1>Cargando sorpresa para el amor de mi vida, Kellen<span id="dots"></span></h1>
-</div><div id="joke1" class="screen">
-<h1>UPS… lo siento cariño 😔</h1>
-<p>El sistema detectó demasiada belleza en Kellen 💗</p>
-</div><div id="joke2" class="screen">
-<h1>JAJAJ solo quería hacerte una pregunta amor 😅</h1>
-</div><div id="question" class="screen">
+</div><!-- ALERTA --><div id="alertScreen" class="screen"><button class="reload" onclick="reload()">↺</button>
+
+<h1>UPS... lo siento cariño 😔</h1><div class="alert">
+!¡ el sistema detectó demasiada belleza en ti 💗 ¡!
+</div></div><!-- SEGUNDA CARGA --><div id="loading2" class="screen">
+<h1>Cargando<span id="dots2"></span></h1>
+</div><!-- MENSAJE ROMÁNTICO --><div id="message" class="screen">
+<h1>Hola mi amor 💗</h1><p>Te hice este pequeño detalle porque te quiero mucho.</p><p>Nomás solo quiero hacerte una preguntita 😊</p></div><!-- PREGUNTA --><div id="question" class="screen">
 <h1 id="questionText">Amor, ¿de verdad me quieres?</h1><button id="yes">Sí</button>
 <button id="no">No</button>
 
-</div><div id="final" class="screen">
-<h1>Siii, te amo mucho mi amor 🥳🥳🥳</h1>
-<p id="counter"></p>
-<p>Gracias por ser parte de mi vida, Kellen💗</p>
+</div><!-- FINAL --><div id="final" class="screen">
+<h1>Siii, te amo mucho mi amor 🥳🥳🥳</h1><p id="counter"></p><p>Gracias por ser parte de mi vida, Kellen💗</p>
 </div><script>
 
-let dots = document.getElementById("dots")
-let count = 0
+/* PUNTOS ANIMADOS */
+
+let dots=document.getElementById("dots")
+let count=0
 
 setInterval(()=>{
-count = (count + 1) % 4
-dots.innerText = ".".repeat(count)
+count=(count+1)%4
+dots.innerText=".".repeat(count)
 },500)
+
+/* SEGUNDA ANIMACIÓN */
+
+let dots2=document.getElementById("dots2")
+let count2=0
+
+setInterval(()=>{
+count2=(count2+1)%4
+dots2.innerText=".".repeat(count2)
+},500)
+
+/* TRANSICIONES */
 
 setTimeout(()=>{
 loading.classList.remove("active")
-joke1.classList.add("active")
+alertScreen.classList.add("active")
+},4000)
+
+/* BOTÓN RECARGAR */
+
+function reload(){
+
+alertScreen.classList.remove("active")
+loading2.classList.add("active")
+
+setTimeout(()=>{
+loading2.classList.remove("active")
+message.classList.add("active")
 },4000)
 
 setTimeout(()=>{
-joke1.classList.remove("active")
-joke2.classList.add("active")
+message.classList.remove("active")
+question.classList.add("active")
 },8000)
 
-setTimeout(()=>{
-joke2.classList.remove("active")
-question.classList.add("active")
-},11000)
+}
 
-let yes = document.getElementById("yes")
-let no = document.getElementById("no")
+/* JUEGO DE BOTONES */
 
-let noSize = 1
-let yesSize = 1
+let yes=document.getElementById("yes")
+let no=document.getElementById("no")
 
-yes.onclick = ()=>{
+let noSize=1
+let yesSize=1
 
-noSize +=0.4
-yesSize -=0.1
+yes.onclick=()=>{
+
+noSize+=0.4
+yesSize-=0.1
 
 no.style.transform=`scale(${noSize})`
 yes.style.transform=`scale(${yesSize})`
 
-if(yesSize < 0.3){
+if(yesSize<0.3){
 
 document.getElementById("questionText").innerText="Ala amor… ¿y ahora cómo hacemos?"
 
 setTimeout(()=>{
-
-yes.style.display="block"
-no.style.display="block"
 
 yes.style.position="absolute"
 no.style.position="absolute"
@@ -153,7 +196,7 @@ no.style.top="65%"
 
 }
 
-yes.ondblclick = ()=>{
+yes.ondblclick=()=>{
 
 question.classList.remove("active")
 final.classList.add("active")
@@ -162,6 +205,8 @@ startConfetti()
 startCounter()
 
 }
+
+/* CONFETI */
 
 function startConfetti(){
 
@@ -183,6 +228,8 @@ document.body.appendChild(confetti)
 
 }
 
+/* CONTADOR */
+
 function startCounter(){
 
 let startDate=new Date("2026-02-21")
@@ -195,6 +242,8 @@ document.getElementById("counter").innerText=
 "Llevamos juntos "+days+" días desde el 21/02/26 💗"
 
 }
+
+/* CORAZONES */
 
 function createHearts(){
 
