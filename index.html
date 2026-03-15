@@ -111,6 +111,15 @@ opacity:0;
 }
 }
 
+#dateCorner{
+position:fixed;
+bottom:40px;
+left:30px;
+font-size:22px;
+transform:rotate(-15deg);
+opacity:0.7;
+}
+  
 </style></head><body><div class="hearts" id="hearts"></div><div id="loading" class="screen active">
 <h1>Cargando sorpresa para el amor de mi vida, Kellen<span id="dots"></span></h1>
 </div><div id="alertScreen" class="screen"><button class="reload" onclick="reload()">↺</button>
@@ -124,11 +133,18 @@ opacity:0;
 <h1>Nomás solo quiero hacerte una preguntita 😊</h1></div><div id="question" class="screen"><h1 id="questionText">Amor, ¿de verdad me quieres?</h1><button id="yes">Sí</button>
 <button id="no">No</button>
 
-</div><div id="final" class="screen"><h1>Siii, te amo mucho mi amor 🥳🥳🥳</h1><p id="counter"></p><p>Gracias por ser parte de mi vida, Kellen💗</p></div><script>
+<div id="final" class="screen">
+
+<h1>Siii, te amo mucho mi amor 🥳🥳🥳</h1>
+
+<h1>Gracias por ser parte de mi vida, Kellen, te amo💗</h1>
+
+<div id="dateCorner">21/02/26 💗</div>
+
+</div>
 
 let dots=document.getElementById("dots")
-let count=0
-
+let count=
 setInterval(()=>{
 count=(count+1)%4
 dots.innerText=".".repeat(count)
@@ -173,6 +189,36 @@ let yesSize=1
 yes.onclick=()=>{
 
 noSize+=0.4
+yesSize+=0.25
+
+no.style.transform=`scale(${noSize})`
+yes.style.transform=`scale(${yesSize})`
+
+let hearts=document.querySelectorAll(".heart")
+
+hearts.forEach(heart=>{
+heart.style.left="50%"
+heart.style.top="60%"
+})
+
+if(noSize>3){
+
+document.getElementById("questionText").innerText="Ala amor… ¿y ahora cómo hacemos?"
+
+setTimeout(()=>{
+
+question.classList.remove("active")
+final.classList.add("active")
+
+startConfetti()
+
+},3000)
+
+}
+
+}
+
+noSize+=0.4
 yesSize+=0.2
 
 no.style.transform=`scale(${noSize})`
@@ -203,15 +249,7 @@ no.style.top="65%"
 
 }
 
-yes.ondblclick=()=>{
 
-question.classList.remove("active")
-final.classList.add("active")
-
-startConfetti()
-startCounter()
-
-}
 
 function startConfetti(){
 
