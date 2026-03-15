@@ -29,7 +29,7 @@ display:block;
 
 h1{
 font-size:32px;
-margin:10px;
+margin:15px;
 }
 
 button{
@@ -62,22 +62,6 @@ border-radius:50%;
 width:45px;
 height:45px;
 display:flex;
-justify-content:center;
-align-items:center;
-box-shadow:0 2px 8px rgba(0,0,0,0.2);
-cursor:pointer;
-}
-
-.resetGame{
-position:fixed;
-top:20px;
-left:20px;
-font-size:24px;
-background:white;
-border-radius:50%;
-width:45px;
-height:45px;
-display:none;
 justify-content:center;
 align-items:center;
 box-shadow:0 2px 8px rgba(0,0,0,0.2);
@@ -142,9 +126,7 @@ opacity:0.7;
 <h1>Cargando<span id="dots2"></span></h1>
 </div><div id="message" class="screen"><h1>Hola mi amor 💗</h1>
 <h1>Te hice este pequeño detalle porque te quiero mucho.</h1>
-<h1>Nomás solo quiero hacerte una preguntita 😊</h1></div><div id="question" class="screen"><button class="resetGame" id="resetBtn" onclick="resetGame()">↺</button>
-
-<h1 id="questionText">Amor, ¿de verdad me quieres?</h1><button id="yes">Sí</button>
+<h1>Nomás solo quiero hacerte una preguntita 😊</h1></div><div id="question" class="screen"><h1 id="questionText">Amor, ¿de verdad me quieres?</h1><button id="yes">Sí</button>
 <button id="no">No</button>
 
 </div><div id="final" class="screen"><h1>Siii, te amo mucho mi amor 🥳🥳🥳</h1><h1>Gracias por ser parte de mi vida, Kellen, te amo💗</h1><div id="dateCorner">21/02/26 💗</div></div><script>
@@ -199,51 +181,57 @@ show("question")
 
 }
 
+let questionText=document.getElementById("questionText")
 let yes=document.getElementById("yes")
 let no=document.getElementById("no")
-let resetBtn=document.getElementById("resetBtn")
 
-let noSize=1
-let covered=false
-let allowWin=false
+let yesMessages=[
+"¿Segura que quieres tocar ese botón? 😏",
+"Ándale amor… toca el botón de 'No' 😆",
+"Porque si no me quieres… 🤨",
+"Se que quieres tocar el de 'No' 😌",
+"Solo una vez… te prometo que no pasa nada 😅",
+"Mmm… sospechoso que sigas tocando 'Sí' 🤔",
+"Bueno… creo que ya entendí algo 💗",
+"Creo que sí me quieres mucho…",
+"Entonces toca una última vez 💗"
+]
+
+let noMessages=[
+"Ahh… ¿no me quieres entonces? 🥺",
+"Bueno… está bien 😔",
+"Yo pensé que sí…",
+"Pero igual te quiero mucho 💗",
+"Aunque tú no me quieras… 😭",
+"Bueno ya… era broma 😅",
+"Porque sé que sí me quieres",
+"Entonces mejor toca 'Sí' 💗"
+]
+
+let yesIndex=0
+let noIndex=0
 
 yes.onclick=()=>{
 
-if(allowWin){
+if(yesIndex < yesMessages.length){
+questionText.innerText=yesMessages[yesIndex]
+yesIndex++
+}else{
 show("final")
 startConfetti()
-return
-}
-
-if(!covered){
-
-noSize+=0.7
-no.style.transform=`scale(${noSize})`
-
-if(noSize>5){
-
-covered=true
-
-document.getElementById("questionText").innerText="Ups… parece que el botón No ganó 😅"
-
-resetBtn.style.display="flex"
-
 }
 
 }
 
+no.onclick=()=>{
+
+if(noIndex < noMessages.length){
+questionText.innerText=noMessages[noIndex]
+noIndex++
+}else{
+no.style.display="none"
+questionText.innerText="Ves… sabía que me querías 💗 ahora toca 'Sí'"
 }
-
-function resetGame(){
-
-noSize=1
-no.style.transform="scale(1)"
-
-resetBtn.style.display="none"
-
-allowWin=true
-
-document.getElementById("questionText").innerText="Bueno… ahora sí puedes tocar el botón Sí 💗"
 
 }
 
