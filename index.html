@@ -13,26 +13,72 @@ align-items:center;
 font-family:Arial;
 background:white;
 text-align:center;
+overflow:hidden;
 }
 
 .screen{
 display:none;
+position:absolute;
 }
 
 .active{
 display:block;
 }
 
+h1{
+font-size:30px;
+}
+
 button{
 padding:15px 30px;
 font-size:18px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 margin:10px;
 cursor:pointer;
+transition:0.3s;
 }
 
-</style></head><body><div id="loading" class="screen active">
+#yes{
+background:#ff6fa5;
+color:white;
+}
+
+#no{
+background:#444;
+color:white;
+}
+
+.hearts{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+.heart{
+position:absolute;
+opacity:0.25;
+}
+
+.confetti{
+position:fixed;
+width:10px;
+height:10px;
+top:-10px;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(100vh) rotate(720deg);
+opacity:0;
+}
+}
+
+</style></head><body><div class="hearts" id="hearts"></div><div id="loading" class="screen active">
 <h1>Cargando sorpresa para el amor de mi vida, Kellen<span id="dots"></span></h1>
 </div><div id="joke1" class="screen">
 <h1>UPS… lo siento cariño 😔</h1>
@@ -40,24 +86,21 @@ cursor:pointer;
 </div><div id="joke2" class="screen">
 <h1>JAJAJ solo quería hacerte una pregunta amor 😅</h1>
 </div><div id="question" class="screen">
-<h1>Amor, ¿de verdad me quieres?</h1><button onclick="final()">Sí</button>
-<button>No</button>
+<h1 id="questionText">Amor, ¿de verdad me quieres?</h1><button id="yes">Sí</button>
+<button id="no">No</button>
 
 </div><div id="final" class="screen">
-<h1>Siii, te amo mucho mi amor 🥳</h1>
-<p>Gracias por ser parte de mi vida, Kellen 💗</p>
+<h1>Siii, te amo mucho mi amor 🥳🥳🥳</h1>
+<p id="counter"></p>
+<p>Gracias por ser parte de mi vida, Kellen💗</p>
 </div><script>
 
 let dots = document.getElementById("dots")
-
 let count = 0
 
 setInterval(()=>{
-
 count = (count + 1) % 4
-
 dots.innerText = ".".repeat(count)
-
 },500)
 
 setTimeout(()=>{
@@ -75,12 +118,110 @@ joke2.classList.remove("active")
 question.classList.add("active")
 },11000)
 
-function final(){
+let yes = document.getElementById("yes")
+let no = document.getElementById("no")
+
+let noSize = 1
+let yesSize = 1
+
+yes.onclick = ()=>{
+
+noSize +=0.4
+yesSize -=0.1
+
+no.style.transform=`scale(${noSize})`
+yes.style.transform=`scale(${yesSize})`
+
+if(yesSize < 0.3){
+
+document.getElementById("questionText").innerText="Ala amor… ¿y ahora cómo hacemos?"
+
+setTimeout(()=>{
+
+yes.style.display="block"
+no.style.display="block"
+
+yes.style.position="absolute"
+no.style.position="absolute"
+
+yes.style.top="55%"
+no.style.top="65%"
+
+},3000)
+
+}
+
+}
+
+yes.ondblclick = ()=>{
 
 question.classList.remove("active")
 final.classList.add("active")
 
+startConfetti()
+startCounter()
+
 }
+
+function startConfetti(){
+
+for(let i=0;i<120;i++){
+
+let confetti=document.createElement("div")
+
+confetti.classList.add("confetti")
+
+confetti.style.left=Math.random()*100+"%"
+
+confetti.style.background=`hsl(${Math.random()*360},100%,50%)`
+
+confetti.style.animationDuration=(Math.random()*3+2)+"s"
+
+document.body.appendChild(confetti)
+
+}
+
+}
+
+function startCounter(){
+
+let startDate=new Date("2026-02-21")
+let today=new Date()
+
+let diff=today-startDate
+let days=Math.floor(diff/(1000*60*60*24))
+
+document.getElementById("counter").innerText=
+"Llevamos juntos "+days+" días desde el 21/02/26 💗"
+
+}
+
+function createHearts(){
+
+let container=document.getElementById("hearts")
+
+let hearts=["💗","❤️","💕","💞","💓"]
+
+for(let i=0;i<35;i++){
+
+let h=document.createElement("div")
+
+h.classList.add("heart")
+
+h.innerText=hearts[Math.floor(Math.random()*hearts.length)]
+
+h.style.left=Math.random()*100+"%"
+h.style.top=Math.random()*100+"%"
+
+h.style.fontSize=(Math.random()*35+10)+"px"
+
+container.appendChild(h)
+
+}
+
+}
+
+createHearts()
 
 </script></body>
 </html>
