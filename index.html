@@ -3,6 +3,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Para Kellen 💗</title><style>
+
 body{
 margin:0;
 height:100vh;
@@ -21,33 +22,64 @@ display:none;
 .active{
 display:block;
 }
+
+button{
+padding:15px 30px;
+font-size:18px;
+border:none;
+border-radius:10px;
+margin:10px;
+cursor:pointer;
+}
+
 </style></head><body><div id="loading" class="screen active">
-<h1>Cargando sorpresa para el amor de mi vida, Kellen...</h1>
-</div><div id="joke" class="screen">
+<h1>Cargando sorpresa para el amor de mi vida, Kellen<span id="dots"></span></h1>
+</div><div id="joke1" class="screen">
 <h1>UPS… lo siento cariño 😔</h1>
 <p>El sistema detectó demasiada belleza en Kellen 💗</p>
+</div><div id="joke2" class="screen">
+<h1>JAJAJ solo quería hacerte una pregunta amor 😅</h1>
 </div><div id="question" class="screen">
-<h1>Amor, ¿de verdad me quieres?</h1>
-<button onclick="final()">Sí</button>
+<h1>Amor, ¿de verdad me quieres?</h1><button onclick="final()">Sí</button>
 <button>No</button>
+
 </div><div id="final" class="screen">
 <h1>Siii, te amo mucho mi amor 🥳</h1>
 <p>Gracias por ser parte de mi vida, Kellen 💗</p>
 </div><script>
 
-setTimeout(()=>{
-document.getElementById("loading").classList.remove("active")
-document.getElementById("joke").classList.add("active")
-},3000)
+let dots = document.getElementById("dots")
+
+let count = 0
+
+setInterval(()=>{
+
+count = (count + 1) % 4
+
+dots.innerText = ".".repeat(count)
+
+},500)
 
 setTimeout(()=>{
-document.getElementById("joke").classList.remove("active")
-document.getElementById("question").classList.add("active")
-},6000)
+loading.classList.remove("active")
+joke1.classList.add("active")
+},4000)
+
+setTimeout(()=>{
+joke1.classList.remove("active")
+joke2.classList.add("active")
+},8000)
+
+setTimeout(()=>{
+joke2.classList.remove("active")
+question.classList.add("active")
+},11000)
 
 function final(){
-document.getElementById("question").classList.remove("active")
-document.getElementById("final").classList.add("active")
+
+question.classList.remove("active")
+final.classList.add("active")
+
 }
 
 </script></body>
