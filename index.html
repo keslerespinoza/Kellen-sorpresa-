@@ -10,7 +10,7 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-font-family:Arial;
+font-family:Arial, sans-serif;
 background:white;
 text-align:center;
 overflow:hidden;
@@ -20,6 +20,7 @@ overflow:hidden;
 display:none;
 position:absolute;
 width:100%;
+padding:20px;
 }
 
 .active{
@@ -55,7 +56,23 @@ color:white;
 position:fixed;
 top:20px;
 right:20px;
-font-size:28px;
+font-size:24px;
+background:white;
+border-radius:50%;
+width:45px;
+height:45px;
+display:flex;
+justify-content:center;
+align-items:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.2);
+cursor:pointer;
+}
+
+.resetGame{
+position:fixed;
+top:20px;
+left:20px;
+font-size:24px;
 background:white;
 border-radius:50%;
 width:45px;
@@ -89,7 +106,6 @@ pointer-events:none;
 .heart{
 position:absolute;
 opacity:0.25;
-transition:1s;
 }
 
 .confetti{
@@ -98,10 +114,6 @@ width:10px;
 height:10px;
 top:-10px;
 animation:fall linear forwards;
-}
-
-#final{
-margin-top:120px;
 }
 
 @keyframes fall{
@@ -119,10 +131,10 @@ font-size:22px;
 transform:rotate(-15deg);
 opacity:0.7;
 }
-  
-</style></head><body><div class="hearts" id="hearts"></div><div id="loading" class="screen active">
-<h1>Cargando sorpresa para el amor de mi vida, Kellen<span id="dots"></span></h1>
-</div><div id="alertScreen" class="screen"><button class="reload" onclick="reload()">↺</button>
+
+</style></head><body><div class="hearts" id="hearts"></div><div id="loading1" class="screen active">
+<h1>Cargando sorpresa para el amor de mi vida, Kellen<span id="dots1"></span></h1>
+</div><div id="alertScreen" class="screen"><button class="reload" onclick="reloadPage()">↺</button>
 
 <h1>UPS... lo siento cariño 😔</h1><div class="alert">
 !¡ el sistema detectó demasiada belleza en ti 💗 ¡!
@@ -130,54 +142,58 @@ opacity:0.7;
 <h1>Cargando<span id="dots2"></span></h1>
 </div><div id="message" class="screen"><h1>Hola mi amor 💗</h1>
 <h1>Te hice este pequeño detalle porque te quiero mucho.</h1>
-<h1>Nomás solo quiero hacerte una preguntita 😊</h1></div><div id="question" class="screen"><h1 id="questionText">Amor, ¿de verdad me quieres?</h1><button id="yes">Sí</button>
+<h1>Nomás solo quiero hacerte una preguntita 😊</h1></div><div id="question" class="screen"><button class="resetGame" onclick="resetGame()">↺</button>
+
+<h1 id="questionText">Amor, ¿de verdad me quieres?</h1><button id="yes">Sí</button>
 <button id="no">No</button>
 
-<div id="final" class="screen">
+</div><div id="final" class="screen"><h1>Siii, te amo mucho mi amor 🥳🥳🥳</h1><h1>Gracias por ser parte de mi vida, Kellen, te amo💗</h1><div id="dateCorner">21/02/26 💗</div></div><script>
 
-<h1>Siii, te amo mucho mi amor 🥳🥳🥳</h1>
+let screens={
+loading1:document.getElementById("loading1"),
+alertScreen:document.getElementById("alertScreen"),
+loading2:document.getElementById("loading2"),
+message:document.getElementById("message"),
+question:document.getElementById("question"),
+final:document.getElementById("final")
+}
 
-<h1>Gracias por ser parte de mi vida, Kellen, te amo💗</h1>
+function show(screen){
+for(let s in screens){
+screens[s].classList.remove("active")
+}
+screens[screen].classList.add("active")
+}
 
-<div id="dateCorner">21/02/26 💗</div>
-
-</div>
-
-let dots=document.getElementById("dots")
-let count=
-setInterval(()=>{
-count=(count+1)%4
-dots.innerText=".".repeat(count)
-},500)
-
+let dots1=document.getElementById("dots1")
 let dots2=document.getElementById("dots2")
-let count2=0
+let d1=0
+let d2=0
 
 setInterval(()=>{
-count2=(count2+1)%4
-dots2.innerText=".".repeat(count2)
+d1=(d1+1)%4
+dots1.innerText=".".repeat(d1)
+},500)
+
+setInterval(()=>{
+d2=(d2+1)%4
+dots2.innerText=".".repeat(d2)
 },500)
 
 setTimeout(()=>{
-loading.classList.remove("active")
-alertScreen.classList.add("active")
+show("alertScreen")
 },4000)
 
-function reload(){
-
-alertScreen.classList.remove("active")
-loading2.classList.add("active")
+function reloadPage(){
+show("loading2")
 
 setTimeout(()=>{
-loading2.classList.remove("active")
-message.classList.add("active")
+show("message")
 },4000)
 
 setTimeout(()=>{
-message.classList.remove("active")
-question.classList.add("active")
+show("question")
 },8000)
-
 }
 
 let yes=document.getElementById("yes")
@@ -185,37 +201,14 @@ let no=document.getElementById("no")
 
 let noSize=1
 let yesSize=1
+let allowWin=false
 
 yes.onclick=()=>{
 
-noSize+=0.4
-yesSize+=0.25
-
-no.style.transform=`scale(${noSize})`
-yes.style.transform=`scale(${yesSize})`
-
-let hearts=document.querySelectorAll(".heart")
-
-hearts.forEach(heart=>{
-heart.style.left="50%"
-heart.style.top="60%"
-})
-
-if(noSize>3){
-
-document.getElementById("questionText").innerText="Ala amor… ¿y ahora cómo hacemos?"
-
-setTimeout(()=>{
-
-question.classList.remove("active")
-final.classList.add("active")
-
+if(allowWin){
+show("final")
 startConfetti()
-
-},3000)
-
-}
-
+return
 }
 
 noSize+=0.4
@@ -224,63 +217,43 @@ yesSize+=0.2
 no.style.transform=`scale(${noSize})`
 yes.style.transform=`scale(${yesSize})`
 
-let hearts=document.querySelectorAll(".heart")
-
-hearts.forEach(heart=>{
-heart.style.left="50%"
-heart.style.top="60%"
-})
-
 if(noSize>3){
 
 document.getElementById("questionText").innerText="Ala amor… ¿y ahora cómo hacemos?"
 
-setTimeout(()=>{
-
-yes.style.position="absolute"
-no.style.position="absolute"
-
-yes.style.top="55%"
-no.style.top="65%"
-
-},3000)
+allowWin=true
 
 }
 
 }
 
+function resetGame(){
 
+noSize=1
+yesSize=1
+allowWin=true
+
+no.style.transform="scale(1)"
+yes.style.transform="scale(1)"
+
+document.getElementById("questionText").innerText="Bueno… ahora sí puedes tocar el botón 😅"
+
+}
 
 function startConfetti(){
 
 for(let i=0;i<120;i++){
 
-let confetti=document.createElement("div")
+let c=document.createElement("div")
+c.className="confetti"
 
-confetti.classList.add("confetti")
+c.style.left=Math.random()*100+"%"
+c.style.background=`hsl(${Math.random()*360},100%,50%)`
+c.style.animationDuration=(Math.random()*3+2)+"s"
 
-confetti.style.left=Math.random()*100+"%"
-
-confetti.style.background=`hsl(${Math.random()*360},100%,50%)`
-
-confetti.style.animationDuration=(Math.random()*3+2)+"s"
-
-document.body.appendChild(confetti)
+document.body.appendChild(c)
 
 }
-
-}
-
-function startCounter(){
-
-let startDate=new Date("2026-02-21")
-let today=new Date()
-
-let diff=today-startDate
-let days=Math.floor(diff/(1000*60*60*24))
-
-document.getElementById("counter").innerText=
-"Llevamos juntos "+days+" días desde el 21/02/26 💗"
 
 }
 
@@ -290,11 +263,10 @@ let container=document.getElementById("hearts")
 
 let hearts=["💗","❤️","💕","💞","💓"]
 
-for(let i=0;i<35;i++){
+for(let i=0;i<40;i++){
 
 let h=document.createElement("div")
-
-h.classList.add("heart")
+h.className="heart"
 
 h.innerText=hearts[Math.floor(Math.random()*hearts.length)]
 
@@ -312,4 +284,4 @@ container.appendChild(h)
 createHearts()
 
 </script></body>
-</html>
+  </html>
